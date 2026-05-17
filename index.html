@@ -3,37 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Devashish Sharma | Interactive IK Robotics</title>
+  <title>Devashish Sharma | Robotics Portfolio</title>
+  
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 </head>
 <body>
 
   <section class="hero">
+    
     <div class="hero-left">
       <h1>DEVASHISH SHARMA</h1>
       <p>Automation | Robotics | Mechatronics</p>
 
       <div class="factory-cell">
-        <canvas id="robotCanvas" width="800" height="500"></canvas>
+        
+        <div class="stack-light">
+          <div class="light red" id="lightRed"></div>
+          <div class="light yellow" id="lightYellow"></div>
+          <div class="light green active" id="lightGreen"></div>
+        </div>
+
+        <div class="platform-container">
+          <div class="drop-zone"></div>
+          <div class="support-leg left"></div>
+          <div class="support-leg right"></div>
+        </div>
+
+        <div class="conveyor-wrapper">
+          <div class="conveyor-track"></div>
+          <div class="rollers" id="conveyorRollers"></div>
+          
+          <div class="conveyor" id="conveyor">
+            <div class="box" id="education-box">EDUCATION</div>
+            <div class="box" id="projects-box">PROJECTS</div>
+            <div class="box" id="experience-box">EXPERIENCE</div>
+            <div class="box" id="skills-box">SKILLS</div>
+            <div class="box" id="contact-box">CONTACT</div>
+          </div>
+        </div>
+
+        <div class="robot-ceiling-base" id="robotBase">
+          <div class="joint shoulder" id="jointShoulder">
+            <div class="joint elbow" id="jointElbow">
+              <div class="joint wrist" id="jointWrist">
+                <div class="gripper" id="gripper">
+                  <div class="claw top"></div>
+                  <div class="claw bottom"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
     <div class="teach-pendant">
       <div class="screen">
-        <div class="screen-title">FANUC TP - IK MODE</div>
+        <div class="screen-title">FANUC TP</div>
         <div id="statusText">READY</div>
-        <div id="coordText">X: 0 | Y: 0</div>
       </div>
       <div class="button-grid">
-        <button onclick="setTarget('education')">EDUCATION</button>
-        <button onclick="setTarget('projects')">PROJECTS</button>
-        <button onclick="setTarget('experience')">EXPERIENCE</button>
-        <button onclick="setTarget('skills')">SKILLS</button>
-        <button onclick="setTarget('contact')">CONTACT</button>
+        <button onclick="selectSection('education')">EDUCATION</button>
+        <button onclick="selectSection('projects')">PROJECTS</button>
+        <button onclick="selectSection('experience')">EXPERIENCE</button>
+        <button onclick="selectSection('skills')">SKILLS</button>
+        <button onclick="selectSection('contact')">CONTACT</button>
       </div>
-      <button class="emergency" onclick="triggerEStop()">EMERGENCY STOP</button>
+      <button class="emergency" onclick="triggerEmergencyStop()">EMERGENCY STOP</button>
     </div>
+
   </section>
+
+  <section id="education" class="content-section"><h2>Education</h2><p>Add your details here.</p></section>
+  <section id="projects" class="content-section"><h2>Projects</h2><p>Add your projects here.</p></section>
+  <section id="experience" class="content-section"><h2>Experience</h2><p>Add your experience here.</p></section>
+  <section id="skills" class="content-section"><h2>Skills</h2><p>Add your skills here.</p></section>
+  <section id="contact" class="content-section"><h2>Contact</h2><p>Add your contact info here.</p></section>
 
   <script src="script.js"></script>
 </body>
