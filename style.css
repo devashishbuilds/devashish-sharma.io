@@ -32,39 +32,56 @@ body { background: #f9f9f9; color: #222; }
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
-/* ================= SAFETY LIGHT ================= */
-.safety-light {
+/* ================= STACK LIGHT (ANDON) ================= */
+.stack-light {
   position: absolute;
   top: 20px;
-  right: 20px;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background: #00ff55;
-  box-shadow: 0 0 15px #00ff55;
-  border: 3px solid #222;
-  transition: all 0.3s;
+  right: 30px;
+  width: 40px;
+  background: #222;
+  border-radius: 8px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: 3px solid #444;
   z-index: 20;
 }
-.safety-light.moving {
-  background: #ffaa00;
-  box-shadow: 0 0 25px #ffaa00;
-  animation: flash 0.6s infinite alternate;
+.light {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  opacity: 0.2; /* Off state */
+  transition: opacity 0.3s;
+  border: 2px solid #111;
 }
+.light.red { background: #ff0000; }
+.light.yellow { background: #ffaa00; }
+.light.green { background: #00ff55; }
+
+/* Active and Flashing states */
+.light.active { opacity: 1; box-shadow: 0 0 15px currentColor; }
+.light.flash { animation: flash 0.5s infinite alternate; opacity: 1; box-shadow: 0 0 20px currentColor; }
 
 @keyframes flash {
   from { opacity: 1; }
-  to { opacity: 0.4; }
+  to { opacity: 0.3; }
 }
-/* ================= DROP ZONE (PLATFORM) ================= */
-.drop-zone {
+
+/* ================= DROP ZONE & SUPPORTS ================= */
+.platform-container {
   position: absolute;
-  bottom: 250px;
-  left: 360px; /* Aligned with pickup point */
+  bottom: 230px; /* Exact height for calculation */
+  left: 360px;
+}
+.drop-zone {
   width: 130px;
   height: 12px;
   background: #444;
   border-radius: 4px;
+  position: relative;
+  z-index: 5;
 }
 .drop-zone::after {
   content: "TARGET PLATFORM";
@@ -76,11 +93,24 @@ body { background: #f9f9f9; color: #222; }
   width: 100%;
   text-align: center;
 }
+/* Industrial Support Legs */
+.support-leg {
+  position: absolute;
+  width: 12px;
+  height: 115px; /* Reaches down to conveyor */
+  background: repeating-linear-gradient(45deg, #555, #555 10px, #444 10px, #444 20px);
+  top: 10px;
+  z-index: 1;
+}
+.support-leg.left { left: 10px; }
+.support-leg.right { right: 10px; }
+
+
 /* ================= WALL-MOUNTED ROBOT ARM ================= */
 .robot-wall-base {
   position: absolute;
   left: -10px;
-  top: 80px; /* Mounted on the left wall */
+  top: 140px; /* Lowered so arm doesn't clip out top */
   width: 60px;
   height: 100px;
   background: #333;
