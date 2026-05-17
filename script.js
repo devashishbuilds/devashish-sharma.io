@@ -1,142 +1,149 @@
-const canvas = document.getElementById('robotCanvas');
-const ctx = canvas.getContext('2d');
-const statusText = document.getElementById('statusText');
-const coordText = document.getElementById('coordText');
+const conveyor = document.getElementById("conveyor");
+const conveyorRollers = document.getElementById("conveyorRollers");
+const statusText = document.getElementById("statusText");
 
-// Robot Configuration
-const robot = {
-  baseX: 200,          // Ceiling mount X
-  baseY: 0,            // Ceiling mount Y
-  L1: 180,             // Length of Upper Arm
-  L2: 160,             // Length of Forearm
-  currentX: 200,       // Current End Effector X
-  currentY: 100,       // Current End Effector Y
-  targetX: 200,
-  targetY: 100,
-  speed: 0.05          // Speed of movement (interpolation)
+const lightRed = document.getElementById("lightRed");
+const lightYellow = document.getElementById("lightYellow");
+const lightGreen = document.getElementById("lightGreen");
+
+let currentSection = null;
+let isMoving = false; 
+let isEmergencyStopped = false;
+
+const positions = {
+  education: 0,
+  projects: -210,
+  experience: -420,
+  skills: -630,
+  contact: -840
 };
 
-let isEStop = false;
-
-// Box coordinates on the grid
-const boxTargets = {
-  education:  { x: 100, y: 400 },
-  projects:   { x: 250, y: 400 },
-  experience: { x: 400, y: 400 },
-  skills:     { x: 550, y: 400 },
-  contact:    { x: 700, y: 400 },
-  platform:   { x: 600, y: 250 }, // Drop off platform
-  idle:       { x: 200, y: 80 }   // Folded near ceiling
+// Mathematically locked angles for perfect contact
+const armPos = {
+  idle:  { shoulder: 170, elbow: -150, wrist: -20 }, // Folded tightly against ceiling
+  reach: { shoulder: 90, elbow: 0, wrist: 0 },       // Straight down (Perfect Box Contact)
+  lift:  { shoulder: 30, elbow: 70, wrist: -10 }     // Target platform angles
 };
 
-// Start animation loop
-requestAnimationFrame(update);
+gsap.set('#jointShoulder', { rotation: armPos.idle.shoulder });
+gsap.set('#jointElbow', { rotation: armPos.idle.elbow });
+gsap.set('#jointWrist', { rotation: armPos.idle.wrist });
 
-function setTarget(section) {
-  if (isEStop) return;
-  statusText.innerText = `MOVING TO: ${section.toUpperCase()}`;
-  robot.targetX = boxTargets[section].x;
-  robot.targetY = boxTargets[section].y;
+function setLights(state) {
+  lightRed.className = "light red";
+  lightYellow.className = "light yellow";
+  lightGreen.className = "light green";
+
+  if (state === 'idle') lightGreen.classList.add("active");
+  if (state === 'moving') lightYellow.classList.add("flash");
+  if (state === 'error') lightRed.classList.add("flash");
 }
 
-function triggerEStop() {
-  isEStop = true;
-  statusText.innerHTML = `<span style="color:red">E-STOP ENGAGED</span>`;
-}
-
-// Inverse Kinematics Math (Law of Cosines)
-function calculateIK(targetX, targetY) {
-  // Distance from base to target
-  let dx = targetX - robot.baseX;
-  let dy = targetY - robot.baseY;
-  let dist = Math.sqrt(dx * dx + dy * dy);
-
-  // Constrain target to maximum reach
-  if (dist > robot.L1 + robot.L2) {
-    dist = robot.L1 + robot.L2 - 0.01;
-    let angle = Math.atan2(dy, dx);
-    targetX = robot.baseX + Math.cos(angle) * dist;
-    targetY = robot.baseY + Math.sin(angle) * dist;
-    dx = targetX - robot.baseX;
-    dy = targetY - robot.baseY;
-  }
-
-  // Calculate angles
-  let angle1 = Math.atan2(dy, dx) - Math.acos((robot.L1 * robot.L1 + dist * dist - robot.L2 * robot.L2) / (2 * robot.L1 * dist));
-  let angle2 = Math.acos((robot.L1 * robot.L1 + robot.L2 * robot.L2 - dist * dist) / (2 * robot.L1 * robot.L2));
-
-  return { a1: angle1, a2: angle2 };
-}
-
-// The Main Render Loop
-function update() {
-  if (!isEStop) {
-    // Smoothly interpolate current position toward target (LERP)
-    robot.currentX += (robot.targetX - robot.currentX) * robot.speed;
-    robot.currentY += (robot.targetY - robot.currentY) * robot.speed;
-  }
-
-  // Calculate angles for the current interpolated position
-  let angles = calculateIK(robot.currentX, robot.currentY);
-  coordText.innerText = `X: ${Math.round(robot.currentX)} | Y: ${Math.round(robot.currentY)}`;
-
-  // Calculate Joint Positions
-  let elbowX = robot.baseX + Math.cos(angles.a1) * robot.L1;
-  let elbowY = robot.baseY + Math.sin(angles.a1) * robot.L1;
+async function selectSection(section) {
+  if (isMoving || isEmergencyStopped || currentSection === section) return;
+  isMoving = true;
   
-  let wristX = elbowX + Math.cos(angles.a1 + angles.a2) * robot.L2;
-  let wristY = elbowY + Math.sin(angles.a1 + angles.a2) * robot.L2;
+  setLights('moving');
+  updateStatus(`SELECTED: ${section.toUpperCase()}`);
 
-  drawScene(elbowX, elbowY, wristX, wristY);
-  requestAnimationFrame(update);
+  if (currentSection) {
+    updateStatus(`RETURNING: ${currentSection.toUpperCase()}`);
+    await returnPreviousBox(currentSection);
+  }
+
+  updateStatus(`MOVING CONVEYOR...`);
+  await moveConveyor(section);
+
+  updateStatus(`PICKING: ${section.toUpperCase()}`);
+  await pickAndPlace(section);
+
+  updateStatus(`READY`);
+  setLights('idle');
+  document.getElementById(section).scrollIntoView({ behavior: "smooth" });
+
+  currentSection = section;
+  isMoving = false;
 }
 
-// Draw graphics to the Canvas
-function drawScene(elbowX, elbowY, wristX, wristY) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear screen
+function updateStatus(text) {
+  statusText.innerHTML = text;
+}
 
-  // Draw Target Platform
-  ctx.fillStyle = '#333';
-  ctx.fillRect(boxTargets.platform.x - 70, boxTargets.platform.y, 140, 15);
+function moveConveyor(section) {
+  return new Promise((resolve) => {
+    const targetX = positions[section];
+    const distanceToMove = Math.abs(gsap.getProperty(conveyor, "x") - targetX);
+    
+    // Animate Conveyor and Rollers together for realism
+    gsap.to(conveyorRollers, {
+      backgroundPositionX: `+=${distanceToMove}`,
+      duration: 1.5,
+      ease: "power2.inOut"
+    });
 
-  // Draw Boxes (Static for this example)
-  ctx.fillStyle = '#ffd100';
-  ctx.lineWidth = 4;
-  ctx.strokeStyle = '#111';
-  Object.keys(boxTargets).forEach(key => {
-    if (key !== 'platform' && key !== 'idle') {
-      ctx.fillRect(boxTargets[key].x - 50, boxTargets[key].y, 100, 60);
-      ctx.strokeRect(boxTargets[key].x - 50, boxTargets[key].y, 100, 60);
-      ctx.fillStyle = '#111';
-      ctx.font = 'bold 14px Arial';
-      ctx.fillText(key.toUpperCase(), boxTargets[key].x - 40, boxTargets[key].y + 35);
-      ctx.fillStyle = '#ffd100';
-    }
+    gsap.to(conveyor, {
+      x: targetX,
+      duration: 1.5,
+      ease: "power2.inOut",
+      onComplete: resolve
+    });
   });
+}
 
-  // Draw Upper Arm
-  ctx.beginPath();
-  ctx.moveTo(robot.baseX, robot.baseY);
-  ctx.lineTo(elbowX, elbowY);
-  ctx.lineWidth = 30;
-  ctx.lineCap = 'round';
-  ctx.strokeStyle = '#ffd100';
-  ctx.stroke();
+function pickAndPlace(section) {
+  return new Promise((resolve) => {
+    const box = document.getElementById(`${section}-box`);
+    const tl = gsap.timeline({ onComplete: resolve });
 
-  // Draw Forearm
-  ctx.beginPath();
-  ctx.moveTo(elbowX, elbowY);
-  ctx.lineTo(wristX, wristY);
-  ctx.lineWidth = 20;
-  ctx.stroke();
+    // 1. Arm extends perfectly straight down. Gripper touches top of box.
+    tl.to('#jointShoulder', { rotation: armPos.reach.shoulder, duration: 0.8, ease: "power1.inOut" }, "reach")
+      .to('#jointElbow', { rotation: armPos.reach.elbow, duration: 0.8, ease: "power1.inOut" }, "reach")
+      .to('#jointWrist', { rotation: armPos.reach.wrist, duration: 0.8, ease: "power1.inOut" }, "reach");
 
-  // Draw Joints (Black circles)
-  ctx.fillStyle = '#222';
-  ctx.beginPath(); ctx.arc(robot.baseX, robot.baseY, 15, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(elbowX, elbowY, 15, 0, Math.PI*2); ctx.fill();
+    // 2. THE BLUE ARC TRAJECTORY:
+    // By using 'sine.inOut' for X and 'power2.out' for Y, the box moves in a physical parabola.
+    tl.to(box, { x: 285, duration: 1.2, ease: "sine.inOut" }, "lift")
+      .to(box, { y: -150, duration: 1.2, ease: "power2.out" }, "lift")
+      .to('#jointShoulder', { rotation: armPos.lift.shoulder, duration: 1.2, ease: "sine.inOut" }, "lift")
+      .to('#jointElbow', { rotation: armPos.lift.elbow, duration: 1.2, ease: "sine.inOut" }, "lift")
+      .to('#jointWrist', { rotation: armPos.lift.wrist, duration: 1.2, ease: "sine.inOut" }, "lift");
+
+    // 3. Arm releases and folds back up to ceiling
+    tl.to('#jointShoulder', { rotation: armPos.idle.shoulder, duration: 0.6, ease: "power1.inOut" }, "idle")
+      .to('#jointElbow', { rotation: armPos.idle.elbow, duration: 0.6, ease: "power1.inOut" }, "idle")
+      .to('#jointWrist', { rotation: armPos.idle.wrist, duration: 0.6, ease: "power1.inOut" }, "idle");
+  });
+}
+
+function returnPreviousBox(section) {
+  return new Promise((resolve) => {
+    const box = document.getElementById(`${section}-box`);
+    const tl = gsap.timeline({ onComplete: resolve });
+
+    // 1. Arm arcs down to the platform
+    tl.to('#jointShoulder', { rotation: armPos.lift.shoulder, duration: 0.6, ease: "power1.inOut" }, "reach")
+      .to('#jointElbow', { rotation: armPos.lift.elbow, duration: 0.6, ease: "power1.inOut" }, "reach")
+      .to('#jointWrist', { rotation: armPos.lift.wrist, duration: 0.6, ease: "power1.inOut" }, "reach");
+
+    // 2. Return Arc Trajectory
+    tl.to(box, { x: 0, duration: 1.2, ease: "sine.inOut" }, "lower")
+      .to(box, { y: 0, duration: 1.2, ease: "power2.in" }, "lower")
+      .to('#jointShoulder', { rotation: armPos.reach.shoulder, duration: 1.2, ease: "sine.inOut" }, "lower")
+      .to('#jointElbow', { rotation: armPos.reach.elbow, duration: 1.2, ease: "sine.inOut" }, "lower")
+      .to('#jointWrist', { rotation: armPos.reach.wrist, duration: 1.2, ease: "sine.inOut" }, "lower");
+
+    // 3. Arm folds back to ceiling
+    tl.to('#jointShoulder', { rotation: armPos.idle.shoulder, duration: 0.8, ease: "power1.inOut" }, "idle")
+      .to('#jointElbow', { rotation: armPos.idle.elbow, duration: 0.8, ease: "power1.inOut" }, "idle")
+      .to('#jointWrist', { rotation: armPos.idle.wrist, duration: 0.8, ease: "power1.inOut" }, "idle");
+  });
+}
+
+function triggerEmergencyStop() {
+  gsap.killTweensOf("*"); 
+  isEmergencyStopped = true;
+  isMoving = false;
   
-  // Draw Gripper
-  ctx.beginPath();
-  ctx.arc(wristX, wristY, 15, 0, Math.PI*2);
-  ctx.fill();
+  setLights('error');
+  updateStatus(`<span style="color:red">SYS FAULT - E-STOP<br>REFRESH TO RESET</span>`);
 }
