@@ -23,9 +23,9 @@ const positions = {
 // Precisely calculated arm angles for perfect contact.
 // New Kinematics: 90 degrees points straight down to the floor
 const armPos = {
-  idle:  { shoulder: 165, elbow: -140, wrist: -25 }, // Folded up tight against ceiling
-  reach: { shoulder: 90, elbow: 10, wrist: -10 },    // Reaching straight down to the box
-  lift:  { shoulder: 35, elbow: 75, wrist: -20 }     // Arcing right to the Target Platform
+  idle:  { shoulder: 170, elbow: -150, wrist: -20 }, // Folded tightly inside screen
+  reach: { shoulder: 90, elbow: 0, wrist: 0 },       // Straight down (Perfect Box Contact)
+  lift:  { shoulder: 30, elbow: 70, wrist: -10 }     // Arcs up to the target platform
 };
 
 gsap.set('#jointShoulder', { rotation: armPos.idle.shoulder });
@@ -100,19 +100,18 @@ function pickAndPlace(section) {
     const box = document.getElementById(`${section}-box`);
     const tl = gsap.timeline({ onComplete: resolve });
 
-    // 1. Arm reaches straight down to pickup location
+    // 1. Arm extends perfectly straight down. Gripper touches top of box.
     tl.to('#jointShoulder', { rotation: armPos.reach.shoulder, duration: 0.8, ease: "power1.inOut" }, "reach")
       .to('#jointElbow', { rotation: armPos.reach.elbow, duration: 0.8, ease: "power1.inOut" }, "reach")
       .to('#jointWrist', { rotation: armPos.reach.wrist, duration: 0.8, ease: "power1.inOut" }, "reach");
 
-    // 2. Trajectory Arc: Lift UP (y:-150) and shift RIGHT (x:230) to the platform
-    // The combination of joint rotation and X/Y translation creates the blue arc
+    // 2. The Arc Trajectory: Moves X right by 285px and Y up by 150px
     tl.to('#jointShoulder', { rotation: armPos.lift.shoulder, duration: 1, ease: "power1.inOut" }, "lift")
       .to('#jointElbow', { rotation: armPos.lift.elbow, duration: 1, ease: "power1.inOut" }, "lift")
       .to('#jointWrist', { rotation: armPos.lift.wrist, duration: 1, ease: "power1.inOut" }, "lift")
-      .to(box, { x: 230, y: -150, duration: 1, ease: "power1.inOut" }, "lift");
+      .to(box, { x: 285, y: -150, duration: 1, ease: "power1.inOut" }, "lift");
 
-    // 3. Arm retracts to ceiling idle, leaving box on platform
+    // 3. Arm releases and folds back up to ceiling
     tl.to('#jointShoulder', { rotation: armPos.idle.shoulder, duration: 0.6, ease: "power1.inOut" }, "idle")
       .to('#jointElbow', { rotation: armPos.idle.elbow, duration: 0.6, ease: "power1.inOut" }, "idle")
       .to('#jointWrist', { rotation: armPos.idle.wrist, duration: 0.6, ease: "power1.inOut" }, "idle");
@@ -124,12 +123,12 @@ function returnPreviousBox(section) {
     const box = document.getElementById(`${section}-box`);
     const tl = gsap.timeline({ onComplete: resolve });
 
-    // 1. Arm arcs over to platform
+    // 1. Arm arcs down to the platform
     tl.to('#jointShoulder', { rotation: armPos.lift.shoulder, duration: 0.6, ease: "power1.inOut" }, "reach")
       .to('#jointElbow', { rotation: armPos.lift.elbow, duration: 0.6, ease: "power1.inOut" }, "reach")
       .to('#jointWrist', { rotation: armPos.lift.wrist, duration: 0.6, ease: "power1.inOut" }, "reach");
 
-    // 2. Return Arc: Bring box back left (x:0) and down (y:0) to the conveyor
+    // 2. Returns box to conveyor (X: 0, Y: 0)
     tl.to('#jointShoulder', { rotation: armPos.reach.shoulder, duration: 1, ease: "power1.inOut" }, "lower")
       .to('#jointElbow', { rotation: armPos.reach.elbow, duration: 1, ease: "power1.inOut" }, "lower")
       .to('#jointWrist', { rotation: armPos.reach.wrist, duration: 1, ease: "power1.inOut" }, "lower")
