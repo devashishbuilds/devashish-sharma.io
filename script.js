@@ -1,7 +1,7 @@
 const conveyor = document.getElementById("conveyor");
+const conveyorRollers = document.getElementById("conveyorRollers");
 const statusText = document.getElementById("statusText");
 
-// Stack Lights
 const lightRed = document.getElementById("lightRed");
 const lightYellow = document.getElementById("lightYellow");
 const lightGreen = document.getElementById("lightGreen");
@@ -10,7 +10,8 @@ let currentSection = null;
 let isMoving = false; 
 let isEmergencyStopped = false;
 
-// Conveyor steps (box 130 + gap 80 = 210px steps)
+// Box width (130) + Gap (80) = 210px steps. 
+// Roller background size is 30px, so moving it 210px perfectly aligns the pattern.
 const positions = {
   education: 0,
   projects: -210,
@@ -19,14 +20,14 @@ const positions = {
   contact: -840
 };
 
-// Adjusted Arm Angles (Folds down to stay inside box)
+// Precisely calculated arm angles for perfect contact.
+// Gripper will lay flat on top of the box.
 const armPos = {
-  idle:  { shoulder: 70, elbow: 110, wrist: 20 },    // Folded downward safely
-  reach: { shoulder: 45, elbow: 30, wrist: 15 },     // Reaching down to conveyor
-  lift:  { shoulder: 15, elbow: 75, wrist: -5 }      // Reaching across to platform
+  idle:  { shoulder: 90, elbow: 110, wrist: -20 },   // Folded out of the way
+  reach: { shoulder: 62, elbow: 15, wrist: 13 },     // Gripper physically touches box top
+  lift:  { shoulder: 28, elbow: 55, wrist: 7 }       // Gripper hovers right above platform
 };
 
-// Initialize
 gsap.set('#jointShoulder', { rotation: armPos.idle.shoulder });
 gsap.set('#jointElbow', { rotation: armPos.idle.elbow });
 gsap.set('#jointWrist', { rotation: armPos.idle.wrist });
@@ -74,8 +75,18 @@ function updateStatus(text) {
 
 function moveConveyor(section) {
   return new Promise((resolve) => {
+    const targetX = positions[section];
+    const distanceToMove = Math.abs(gsap.getProperty(conveyor, "x") - targetX);
+    
+    // Animate Conveyor and Rollers together
+    gsap.to(conveyorRollers, {
+      backgroundPositionX: `+=${distanceToMove}`, // Spins the rollers visually
+      duration: 1.5,
+      ease: "power2.inOut"
+    });
+
     gsap.to(conveyor, {
-      x: positions[section],
+      x: targetX,
       duration: 1.5,
       ease: "power2.inOut",
       onComplete: resolve
@@ -88,18 +99,18 @@ function pickAndPlace(section) {
     const box = document.getElementById(`${section}-box`);
     const tl = gsap.timeline({ onComplete: resolve });
 
-    // Arm reaches down to box
+    // 1. Arm reaches down, precisely touching the box
     tl.to('#jointShoulder', { rotation: armPos.reach.shoulder, duration: 0.8, ease: "power1.inOut" }, "reach")
       .to('#jointElbow', { rotation: armPos.reach.elbow, duration: 0.8, ease: "power1.inOut" }, "reach")
       .to('#jointWrist', { rotation: armPos.reach.wrist, duration: 0.8, ease: "power1.inOut" }, "reach");
 
-    // Lifts box perfectly onto platform (Platform is 115px exactly above Conveyor track)
+    // 2. Arm and Box lift perfectly onto the platform (Y = -150 to sit exactly flush on the platform)
     tl.to('#jointShoulder', { rotation: armPos.lift.shoulder, duration: 1, ease: "power1.inOut" }, "lift")
       .to('#jointElbow', { rotation: armPos.lift.elbow, duration: 1, ease: "power1.inOut" }, "lift")
       .to('#jointWrist', { rotation: armPos.lift.wrist, duration: 1, ease: "power1.inOut" }, "lift")
-      .to(box, { y: -115, duration: 1, ease: "power1.inOut" }, "lift");
+      .to(box, { y: -150, duration: 1, ease: "power1.inOut" }, "lift");
 
-    // Arm retracts to idle
+    // 3. Arm retracts, leaving box
     tl.to('#jointShoulder', { rotation: armPos.idle.shoulder, duration: 0.6, ease: "power1.inOut" }, "idle")
       .to('#jointElbow', { rotation: armPos.idle.elbow, duration: 0.6, ease: "power1.inOut" }, "idle")
       .to('#jointWrist', { rotation: armPos.idle.wrist, duration: 0.6, ease: "power1.inOut" }, "idle");
@@ -111,15 +122,18 @@ function returnPreviousBox(section) {
     const box = document.getElementById(`${section}-box`);
     const tl = gsap.timeline({ onComplete: resolve });
 
+    // 1. Arm reaches platform
     tl.to('#jointShoulder', { rotation: armPos.lift.shoulder, duration: 0.6, ease: "power1.inOut" }, "reach")
       .to('#jointElbow', { rotation: armPos.lift.elbow, duration: 0.6, ease: "power1.inOut" }, "reach")
       .to('#jointWrist', { rotation: armPos.lift.wrist, duration: 0.6, ease: "power1.inOut" }, "reach");
 
+    // 2. Arm and Box lower back to conveyor exactly (Y = 0)
     tl.to('#jointShoulder', { rotation: armPos.reach.shoulder, duration: 1, ease: "power1.inOut" }, "lower")
       .to('#jointElbow', { rotation: armPos.reach.elbow, duration: 1, ease: "power1.inOut" }, "lower")
       .to('#jointWrist', { rotation: armPos.reach.wrist, duration: 1, ease: "power1.inOut" }, "lower")
       .to(box, { y: 0, duration: 1, ease: "power1.inOut" }, "lower");
 
+    // 3. Arm idles safely
     tl.to('#jointShoulder', { rotation: armPos.idle.shoulder, duration: 0.8, ease: "power1.inOut" }, "idle")
       .to('#jointElbow', { rotation: armPos.idle.elbow, duration: 0.8, ease: "power1.inOut" }, "idle")
       .to('#jointWrist', { rotation: armPos.idle.wrist, duration: 0.8, ease: "power1.inOut" }, "idle");
@@ -127,11 +141,10 @@ function returnPreviousBox(section) {
 }
 
 function triggerEmergencyStop() {
-  // Kills all active GSAP animations immediately
   gsap.killTweensOf("*"); 
   isEmergencyStopped = true;
   isMoving = false;
   
   setLights('error');
-  updateStatus(`<span style="color:red">E-STOP ENGAGED<br>REFRESH TO RESET</span>`);
+  updateStatus(`<span style="color:red">SYS FAULT - E-STOP<br>REFRESH TO RESET</span>`);
 }
