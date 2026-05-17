@@ -1,132 +1,207 @@
-// script.js
-
-const conveyor = document.getElementById("conveyor");
-const robotArm = document.getElementById("robotArm");
-const statusText = document.getElementById("statusText");
-
-let currentSection = null;
-
-const positions = {
-  education: 0,
-  projects: -200,
-  experience: -400,
-  skills: -600,
-  contact: -800
-};
-
-async function selectSection(section) {
-
-  updateStatus(`SELECTED ${section.toUpperCase()}`);
-
-  // Return previous box
-  if (currentSection && currentSection !== section) {
-
-    updateStatus(`RETURNING ${currentSection.toUpperCase()}`);
-
-    await returnPreviousBox(currentSection);
-
-  }
-
-  // Move conveyor
-  updateStatus(`MOVING CONVEYOR`);
-
-  await moveConveyor(section);
-
-  // Pick box
-  updateStatus(`PICKING ${section.toUpperCase()}`);
-
-  await pickAndPlace(section);
-
-  // Scroll
-  updateStatus(`OPENING ${section.toUpperCase()}`);
-
-  document
-    .getElementById(section)
-    .scrollIntoView({
-      behavior: "smooth"
-    });
-
-  currentSection = section;
-
-  updateStatus(`READY`);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ================= STATUS ================= */
+html { scroll-behavior: smooth; }
+body { background: #f9f9f9; color: #222; }
 
-function updateStatus(text) {
-  statusText.innerHTML = text;
+/* ================= HERO ================= */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  gap: 40px;
+}
+.hero-left { width: 75%; }
+.hero h1 { font-size: 4rem; margin-bottom: 10px; }
+.hero p { font-size: 1.2rem; color: #555; margin-bottom: 40px; }
+
+/* ================= FACTORY CELL ================= */
+.factory-cell {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid #ddd;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* ================= DROP ZONE (PLATFORM) ================= */
+.drop-zone {
+  position: absolute;
+  bottom: 250px;
+  left: 320px;
+  width: 120px;
+  height: 12px;
+  background: #444;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+}
+.drop-zone::after {
+  content: "TARGET PLATFORM";
+  position: absolute;
+  top: -25px;
+  font-weight: bold;
+  color: #888;
+  font-size: 0.75rem;
+  width: 200px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* ================= ROBOT ARM (NESTED) ================= */
+.robot-base {
+  position: absolute;
+  left: 100px;
+  bottom: 60px;
+  width: 80px;
+  height: 90px;
+  background: #333;
+  border-radius: 10px 10px 0 0;
+}
+
+.joint {
+  position: absolute;
+  background: #ffd100; /* Fanuc Yellow */
+  border: 3px solid #222;
+  border-radius: 15px;
+  height: 30px;
+  transform-origin: 15px 15px; /* Pivot point */
+}
+
+/* Pivot Pins */
+.joint::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #222;
+  border-radius: 50%;
+  top: 6px;
+  left: 6px;
+}
+
+.shoulder { width: 150px; top: 15px; left: 25px; z-index: 3; }
+.elbow { width: 130px; top: -3px; left: 120px; z-index: 2; }
+.wrist { width: 70px; top: -3px; left: 100px; z-index: 1; }
+
+.gripper {
+  position: absolute;
+  width: 25px;
+  height: 40px;
+  border: 4px solid #222;
+  border-left: none;
+  top: -9px;
+  left: 55px;
+  border-radius: 0 8px 8px 0;
 }
 
 /* ================= CONVEYOR ================= */
-
-function moveConveyor(section) {
-
-  return new Promise((resolve) => {
-
-    gsap.to(conveyor, {
-      x: positions[section],
-      duration: 2,
-      ease: "power2.inOut",
-      onComplete: resolve
-    });
-
-  });
-
+.conveyor-wrapper {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+}
+.conveyor-track {
+  position: absolute;
+  width: 100%;
+  height: 40px;
+  background: #888;
+  border-top: 4px solid #555;
+  top: 50px;
+}
+.conveyor {
+  position: absolute;
+  display: flex;
+  gap: 80px;
+  left: 320px; /* Aligns first box directly under platform */
+  top: 0;
+}
+.box {
+  width: 120px;
+  height: 90px;
+  background: #ffd100;
+  border: 3px solid #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.15);
 }
 
-/* ================= PICK AND PLACE ================= */
+/* ================= TEACH PENDANT ================= */
+.teach-pendant {
+  width: 320px;
+  background: #ffd100;
+  border-radius: 12px;
+  padding: 20px;
+  border: 4px solid #222;
+  height: fit-content;
+  position: sticky;
+  top: 30px;
+  box-shadow: 5px 5px 0px rgba(0,0,0,0.8);
+}
+.screen {
+  background: #0a2c0a;
+  color: #00ff55;
+  height: 120px;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 20px;
+  font-family: monospace;
+  border: 4px solid #222;
+}
+.screen-title { margin-bottom: 10px; font-size: 1rem; border-bottom: 1px solid #00ff55; padding-bottom: 5px;}
+#statusText { line-height: 1.5; font-size: 0.9rem; }
 
-function pickAndPlace(section) {
+.button-grid { display: flex; flex-direction: column; gap: 10px; }
+.button-grid button {
+  background: #222;
+  color: white;
+  border: none;
+  padding: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: 0.2s;
+  text-transform: uppercase;
+}
+.button-grid button:hover { background: #444; }
 
-  return new Promise((resolve) => {
-
-    const box = document.getElementById(`${section}-box`);
-
-    const tl = gsap.timeline({
-      onComplete: resolve
-    });
-
-    tl.to(robotArm, {
-      rotation: -15,
-      duration: 0.8
-    })
-
-    .to(box, {
-      y: -130,
-      duration: 0.8
-    })
-
-    .to(box, {
-      x: 400,
-      y: -260,
-      duration: 1.2
-    })
-
-    .to(robotArm, {
-      rotation: 0,
-      duration: 0.8
-    });
-
-  });
-
+.emergency {
+  margin-top: 20px;
+  background: #e60000;
+  color: white;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 50px;
+  border: 3px solid #222;
+  cursor: pointer;
 }
 
-/* ================= RETURN BOX ================= */
+/* ================= CONTENT ================= */
+.content-section {
+  min-height: 80vh;
+  padding: 100px 80px;
+  border-top: 2px solid #ddd;
+}
+.content-section h2 { font-size: 2.5rem; margin-bottom: 20px; }
+.content-section p { max-width: 700px; line-height: 1.8; color: #444; }
 
-function returnPreviousBox(section) {
-
-  return new Promise((resolve) => {
-
-    const box = document.getElementById(`${section}-box`);
-
-    gsap.to(box, {
-      x: 0,
-      y: 0,
-      duration: 1,
-      ease: "power2.inOut",
-      onComplete: resolve
-    });
-
-  });
-
+@media (max-width: 1100px) {
+  .hero { flex-direction: column; }
+  .hero-left { width: 100%; }
+  .teach-pendant { width: 100%; position: relative; }
 }
