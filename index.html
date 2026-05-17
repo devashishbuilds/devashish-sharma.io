@@ -1,172 +1,84 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Devashish Sharma | Robotics Portfolio</title>
-
   <link rel="stylesheet" href="style.css" />
-
-  <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 </head>
-
 <body>
 
-  <!-- ================= HERO ================= -->
-
   <section class="hero">
-
     <div class="hero-left">
-
       <h1>DEVASHISH SHARMA</h1>
       <p>Automation | Robotics | Mechatronics</p>
 
-      <!-- ROBOT CELL -->
       <div class="factory-cell">
+        
+        <div class="drop-zone"></div>
 
-        <!-- ROBOT ARM -->
-        <div class="robot-base">
-          <div class="robot-arm" id="robotArm">
-
-            <div class="joint shoulder"></div>
-            <div class="joint elbow"></div>
-            <div class="joint wrist"></div>
-
-            <div class="gripper"></div>
-
-          </div>
-        </div>
-
-        <!-- DROP ZONE -->
-        <div class="drop-zone">
-          ACTIVE SECTION
-        </div>
-
-        <!-- CONVEYOR -->
         <div class="conveyor-wrapper">
-
           <div class="conveyor-track"></div>
-
           <div class="conveyor" id="conveyor">
-
-            <div class="box" id="education-box" data-target="education">
-              EDUCATION
-            </div>
-
-            <div class="box" id="projects-box" data-target="projects">
-              PROJECTS
-            </div>
-
-            <div class="box" id="experience-box" data-target="experience">
-              EXPERIENCE
-            </div>
-
-            <div class="box" id="skills-box" data-target="skills">
-              SKILLS
-            </div>
-
-            <div class="box" id="contact-box" data-target="contact">
-              CONTACT
-            </div>
-
+            <div class="box" id="education-box">EDUCATION</div>
+            <div class="box" id="projects-box">PROJECTS</div>
+            <div class="box" id="experience-box">EXPERIENCE</div>
+            <div class="box" id="skills-box">SKILLS</div>
+            <div class="box" id="contact-box">CONTACT</div>
           </div>
+        </div>
 
+        <div class="robot-base" id="robotBase">
+          <div class="joint shoulder" id="jointShoulder">
+            <div class="joint elbow" id="jointElbow">
+              <div class="joint wrist" id="jointWrist">
+                <div class="gripper" id="gripper"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
-
     </div>
 
-    <!-- FANUC TEACH PENDANT -->
     <div class="teach-pendant">
-
       <div class="screen">
-
-        <div class="screen-title">
-          FANUC TP
-        </div>
-
-        <div id="statusText">
-          READY
-        </div>
-
+        <div class="screen-title">FANUC TP</div>
+        <div id="statusText">READY</div>
       </div>
-
       <div class="button-grid">
-
-        <button onclick="selectSection('education')">
-          EDUCATION
-        </button>
-
-        <button onclick="selectSection('projects')">
-          PROJECTS
-        </button>
-
-        <button onclick="selectSection('experience')">
-          EXPERIENCE
-        </button>
-
-        <button onclick="selectSection('skills')">
-          SKILLS
-        </button>
-
-        <button onclick="selectSection('contact')">
-          CONTACT
-        </button>
-
+        <button onclick="selectSection('education')">EDUCATION</button>
+        <button onclick="selectSection('projects')">PROJECTS</button>
+        <button onclick="selectSection('experience')">EXPERIENCE</button>
+        <button onclick="selectSection('skills')">SKILLS</button>
+        <button onclick="selectSection('contact')">CONTACT</button>
       </div>
-
-      <div class="emergency">
-        EMERGENCY STOP
-      </div>
-
+      <div class="emergency">EMERGENCY STOP</div>
     </div>
-
   </section>
-
-  <!-- ================= SECTIONS ================= -->
 
   <section id="education" class="content-section">
     <h2>Education</h2>
-    <p>
-      Add your education details here.
-    </p>
+    <p>Add your education details here.</p>
   </section>
-
   <section id="projects" class="content-section">
     <h2>Projects</h2>
-    <p>
-      Add robotics/mechatronics projects here.
-    </p>
+    <p>Add robotics/mechatronics projects here.</p>
   </section>
-
   <section id="experience" class="content-section">
     <h2>Experience</h2>
-    <p>
-      Add your internships/work experience here.
-    </p>
+    <p>Add your internships/work experience here.</p>
   </section>
-
   <section id="skills" class="content-section">
     <h2>Skills</h2>
-    <p>
-      PLC, ROS, MATLAB, CAD, Embedded Systems, etc.
-    </p>
+    <p>PLC, ROS, MATLAB, CAD, Embedded Systems, etc.</p>
   </section>
-
   <section id="contact" class="content-section">
     <h2>Contact</h2>
-    <p>
-      Email / LinkedIn / GitHub
-    </p>
+    <p>Email / LinkedIn / GitHub</p>
   </section>
 
   <script src="script.js"></script>
-
 </body>
-
 </html>
