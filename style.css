@@ -32,17 +32,39 @@ body { background: #f9f9f9; color: #222; }
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
+/* ================= SAFETY LIGHT ================= */
+.safety-light {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #00ff55;
+  box-shadow: 0 0 15px #00ff55;
+  border: 3px solid #222;
+  transition: all 0.3s;
+  z-index: 20;
+}
+.safety-light.moving {
+  background: #ffaa00;
+  box-shadow: 0 0 25px #ffaa00;
+  animation: flash 0.6s infinite alternate;
+}
+
+@keyframes flash {
+  from { opacity: 1; }
+  to { opacity: 0.4; }
+}
 /* ================= DROP ZONE (PLATFORM) ================= */
 .drop-zone {
   position: absolute;
   bottom: 250px;
-  left: 320px;
-  width: 120px;
+  left: 360px; /* Aligned with pickup point */
+  width: 130px;
   height: 12px;
   background: #444;
   border-radius: 4px;
-  display: flex;
-  justify-content: center;
 }
 .drop-zone::after {
   content: "TARGET PLATFORM";
@@ -51,86 +73,87 @@ body { background: #f9f9f9; color: #222; }
   font-weight: bold;
   color: #888;
   font-size: 0.75rem;
-  width: 200px;
+  width: 100%;
   text-align: center;
-  letter-spacing: 1px;
 }
-
-/* ================= ROBOT ARM (NESTED & FIXED) ================= */
-.robot-base {
+/* ================= WALL-MOUNTED ROBOT ARM ================= */
+.robot-wall-base {
   position: absolute;
-  left: 120px;
-  bottom: 60px; /* Sits right above conveyor */
-  width: 80px;
-  height: 90px;
+  left: -10px;
+  top: 80px; /* Mounted on the left wall */
+  width: 60px;
+  height: 100px;
   background: #333;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0 10px 10px 0;
+  border: 4px solid #222;
+  border-left: none;
   z-index: 10;
 }
 
 .joint {
   position: absolute;
-  background: #ffd100; /* Fanuc Yellow */
+  background: #ffd100;
   border: 3px solid #222;
   border-radius: 15px;
   height: 30px;
-  transform-origin: 15px 15px; /* Pivot point exactly at the circular end */
+  transform-origin: 15px 15px;
 }
 
-/* Pivot Pins */
 .joint::after {
   content: '';
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: #222;
-  border-radius: 50%;
-  top: 6px;
-  left: 6px;
+  width: 12px; height: 12px; background: #222;
+  border-radius: 50%; top: 6px; left: 6px;
 }
 
-/* Since they are nested, 'left' is relative to the PREVIOUS joint's length */
-.shoulder { width: 160px; top: 15px; left: 25px; z-index: 3; }
-.elbow    { width: 140px; top: -3px; left: 135px; z-index: 2; }
-.wrist    { width: 70px;  top: -3px; left: 115px; z-index: 1; }
+/* Adjusted lengths for new reach */
+.shoulder { width: 170px; top: 30px; left: 10px; z-index: 3; }
+.elbow    { width: 150px; top: -3px; left: 145px; z-index: 2; }
+.wrist    { width: 80px;  top: -3px; left: 125px; z-index: 1; }
 
 .gripper {
   position: absolute;
-  width: 30px;
+  width: 35px;
   height: 40px;
   border: 4px solid #222;
   border-left: none;
   top: -9px;
-  left: 55px;
+  left: 65px;
   border-radius: 0 8px 8px 0;
 }
 
-/* ================= CONVEYOR ================= */
+
+/* ================= CONVEYOR SYSTEM ================= */
 .conveyor-wrapper {
   position: absolute;
-  bottom: 60px;
-  left: 0;
-  width: 100%;
-  height: 140px;
-  overflow: hidden;
+  top: 0; left: 0;
+  width: 100%; height: 100%; /* No longer clipping boxes! */
 }
 .conveyor-track {
   position: absolute;
   width: 100%;
-  height: 40px;
-  background: #888;
-  border-top: 4px solid #555;
-  top: 50px;
+  height: 35px;
+  background: #666;
+  border-top: 4px solid #444;
+  bottom: 80px;
+}
+.rollers {
+  position: absolute;
+  bottom: 60px;
+  width: 100%;
+  height: 20px;
+  /* Creates the visual effect of mechanical rollers */
+  background: repeating-linear-gradient(90deg, #333, #333 15px, transparent 15px, transparent 25px);
 }
 .conveyor {
   position: absolute;
   display: flex;
   gap: 80px;
-  left: 320px; /* Aligns first box directly under platform */
-  top: 0;
+  left: 360px; /* Align first box */
+  bottom: 115px; /* Rest exactly on track */
 }
 .box {
-  width: 120px;
+  width: 130px;
   height: 90px;
   background: #ffd100;
   border: 3px solid #111;
@@ -138,8 +161,6 @@ body { background: #f9f9f9; color: #222; }
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  font-size: 0.9rem;
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.15);
 }
 
 /* ================= TEACH PENDANT ================= */
