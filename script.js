@@ -14,10 +14,11 @@ const positions = {
 };
 
 // Robot Arm Kinematic Angles (Degrees)
+// Robot Arm Kinematic Angles (Degrees)
 const armPos = {
-  idle:  { shoulder: -60, elbow: 120, wrist: 30 },
-  reach: { shoulder: 15,  elbow: 45,  wrist: -60 }, // Bend down to conveyor
-  lift:  { shoulder: -25, elbow: 45,  wrist: -20 }  // Reach up to platform
+  idle:  { shoulder: -80, elbow: 70, wrist: 10 },   // Standing tall
+  reach: { shoulder: 15,  elbow: 25, wrist: -40 },  // Bending down to conveyor
+  lift:  { shoulder: -40, elbow: 60, wrist: -20 }   // Reaching up to platform
 };
 
 // Initialize Robot Arm to Idle State
