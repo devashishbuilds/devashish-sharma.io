@@ -23,7 +23,7 @@ const positions = {
 // Precisely calculated arm angles for perfect contact.
 // Gripper will lay flat on top of the box.
 const armPos = {
-  idle:  { shoulder: 90, elbow: 110, wrist: -20 },   // Folded out of the way
+  idle:  { shoulder: 0, elbow: 110, wrist: -20 },   // Folded out of the way
   reach: { shoulder: 62, elbow: 15, wrist: 13 },     // Gripper physically touches box top
   lift:  { shoulder: 28, elbow: 55, wrist: 7 }       // Gripper hovers right above platform
 };
