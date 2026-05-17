@@ -80,9 +80,18 @@ body { background: #e0e5ec; color: #222; }
 .support-leg.right { right: 15px; }
 
 /* ================= WALL-MOUNTED ROBOT ARM ================= */
-.robot-wall-base {
-  position: absolute; left: -10px; top: 120px; width: 60px; height: 110px;
-  background: #333; border-radius: 0 10px 10px 0; border: 4px solid #222; z-index: 10;
+/* ================= CEILING-MOUNTED ROBOT ARM ================= */
+.robot-ceiling-base {
+  position: absolute;
+  left: 150px; /* Positioned exactly over the pickup zone */
+  top: -4px; /* Flush with the ceiling */
+  width: 100px;
+  height: 60px;
+  background: #333;
+  border-radius: 0 0 10px 10px; /* Rounded at the bottom now */
+  border: 4px solid #222;
+  border-top: none;
+  z-index: 10;
 }
 .joint {
   position: absolute; background: #ffd100; border: 4px solid #222;
@@ -94,7 +103,7 @@ body { background: #e0e5ec; color: #222; }
 }
 
 /* Recalibrated exact lengths */
-.shoulder { width: 180px; top: 30px; left: 10px; z-index: 3; }
+.shoulder { width: 180px; top: 15px; left: 40px; z-index: 3; }
 .elbow    { width: 160px; top: -4px; left: 155px; z-index: 2; }
 .wrist    { width: 90px;  top: -4px; left: 135px; z-index: 1; }
 
@@ -117,8 +126,15 @@ body { background: #e0e5ec; color: #222; }
   background-repeat: repeat-x;
   border-bottom: 4px solid #444;
 }
-.conveyor { position: absolute; display: flex; gap: 80px; left: 365px; bottom: 120px; z-index: 3;}
-.box {
+.conveyor { 
+  position: absolute; 
+  display: flex; 
+  gap: 80px; 
+  /* Shifted left so the first box starts under the ceiling arm (150px) instead of the platform (360px) */
+  left: 135px; 
+  bottom: 120px; 
+  z-index: 3;
+}.box {
   width: 130px; height: 90px; background: #ffd100; border: 4px solid #111;
   display: flex; justify-content: center; align-items: center; font-weight: bold;
   box-shadow: inset 0 0 15px rgba(0,0,0,0.15);
