@@ -57,11 +57,73 @@ body { background: #e0e5ec; color: #222; }
 .light.flash { animation: flash 0.5s infinite alternate; opacity: 1; box-shadow: 0 0 25px currentColor; }
 @keyframes flash { from { opacity: 1; } to { opacity: 0.2; } }
 
+/* ================= CEILING-MOUNTED ROBOT ARM ================= */
+.robot-ceiling-base {
+  position: absolute;
+  left: 140px; /* Shifted fully inside the screen */
+  top: -4px; 
+  width: 80px;
+  height: 60px;
+  background: #333;
+  border-radius: 0 0 10px 10px;
+  border: 4px solid #222;
+  border-top: none;
+  z-index: 10;
+}
+
+.joint {
+  position: absolute; background: #ffd100; border: 4px solid #222;
+  border-radius: 18px; height: 36px; 
+  transform-origin: 18px 18px; /* Exact center of the rounded end */
+}
+.joint::after {
+  content: ''; position: absolute; width: 12px; height: 12px;
+  background: #222; border-radius: 50%; top: 8px; left: 8px;
+}
+
+/* EXACT KINEMATIC LENGTHS */
+/* Total reach straight down = 160 + 140 + 60 = 360px */
+.shoulder { width: 178px; top: 10px; left: 20px; z-index: 3; } /* 178 - 18 pivot = 160 effective */
+.elbow    { width: 158px; top: -4px; left: 160px; z-index: 2; } /* 158 - 18 pivot = 140 effective */
+.wrist    { width: 78px;  top: -4px; left: 140px; z-index: 1; } /* 78 - 18 pivot = 60 effective */
+
+.gripper {
+  position: absolute; width: 35px; height: 46px; border: 6px solid #222;
+  border-left: none; top: -11px; left: 60px; border-radius: 0 8px 8px 0;
+}
+/* Gripper Claws */
+.claw { position: absolute; width: 15px; height: 6px; background: #222; left: 30px; }
+.claw.top { top: -6px; border-radius: 0 4px 4px 0;}
+.claw.bottom { bottom: -6px; border-radius: 0 4px 4px 0;}
+
+/* ================= ADJUSTED CONVEYOR SYSTEM ================= */
+.conveyor-track {
+  position: absolute; width: 100%; height: 40px; background: #555;
+  border-top: 6px solid #333; 
+  bottom: 60px; /* Lowered so the box sits exactly at the 360px arm reach */
+  z-index: 2;
+}
+.rollers {
+  position: absolute; bottom: 35px; width: 100%; height: 25px; z-index: 1;
+  background-image: radial-gradient(circle, #888 40%, transparent 45%);
+  background-size: 30px 30px; background-repeat: repeat-x;
+  border-bottom: 4px solid #444;
+}
+.conveyor { 
+  position: absolute; display: flex; gap: 80px; 
+  left: 115px; /* Aligns first box dead-center under the robot */
+  bottom: 100px; z-index: 3;
+}
+.box {
+  width: 130px; height: 90px; background: #ffd100; border: 4px solid #111;
+  display: flex; justify-content: center; align-items: center; font-weight: bold;
+}
+
 /* ================= DROP ZONE & SUPPORTS ================= */
 .platform-container {
   position: absolute;
-  bottom: 270px; /* Elevated safely above passing boxes */
-  left: 360px; /* Exact X-axis drop zone */
+  bottom: 250px; /* Exact height for the trajectory drop */
+  left: 400px;
 }
 .drop-zone {
   width: 140px; height: 16px; background: #333; border-radius: 4px;
@@ -72,73 +134,12 @@ body { background: #e0e5ec; color: #222; }
   font-weight: bold; color: #555; font-size: 0.8rem; width: 100%; text-align: center;
 }
 .support-leg {
-  position: absolute; width: 16px; height: 165px; /* Reaches exactly to track */
+  position: absolute; width: 16px; height: 155px;
   background: repeating-linear-gradient(45deg, #777, #777 10px, #555 10px, #555 20px);
   top: 15px; z-index: 1; border: 2px solid #222;
 }
 .support-leg.left { left: 15px; }
 .support-leg.right { right: 15px; }
-
-/* ================= WALL-MOUNTED ROBOT ARM ================= */
-/* ================= CEILING-MOUNTED ROBOT ARM ================= */
-.robot-ceiling-base {
-  position: absolute;
-  left: 150px; /* Positioned exactly over the pickup zone */
-  top: -4px; /* Flush with the ceiling */
-  width: 100px;
-  height: 60px;
-  background: #333;
-  border-radius: 0 0 10px 10px; /* Rounded at the bottom now */
-  border: 4px solid #222;
-  border-top: none;
-  z-index: 10;
-}
-.joint {
-  position: absolute; background: #ffd100; border: 4px solid #222;
-  border-radius: 18px; height: 36px; transform-origin: 18px 18px;
-}
-.joint::after {
-  content: ''; position: absolute; width: 16px; height: 16px;
-  background: #222; border-radius: 50%; top: 6px; left: 6px;
-}
-
-/* Recalibrated exact lengths */
-.shoulder { width: 180px; top: 15px; left: 40px; z-index: 3; }
-.elbow    { width: 160px; top: -4px; left: 155px; z-index: 2; }
-.wrist    { width: 90px;  top: -4px; left: 135px; z-index: 1; }
-
-.gripper {
-  position: absolute; width: 40px; height: 46px; border: 6px solid #222;
-  border-left: none; top: -11px; left: 75px; border-radius: 0 8px 8px 0;
-}
-
-/* ================= CONVEYOR SYSTEM ================= */
-.conveyor-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-.conveyor-track {
-  position: absolute; width: 100%; height: 40px; background: #555;
-  border-top: 6px solid #333; bottom: 80px; z-index: 2;
-}
-.rollers {
-  position: absolute; bottom: 55px; width: 100%; height: 25px; z-index: 1;
-  /* CSS circles for rollers */
-  background-image: radial-gradient(circle, #888 40%, transparent 45%);
-  background-size: 30px 30px; /* Each roller is 30px wide */
-  background-repeat: repeat-x;
-  border-bottom: 4px solid #444;
-}
-.conveyor { 
-  position: absolute; 
-  display: flex; 
-  gap: 80px; 
-  /* Shifted left so the first box starts under the ceiling arm (150px) instead of the platform (360px) */
-  left: 135px; 
-  bottom: 120px; 
-  z-index: 3;
-}.box {
-  width: 130px; height: 90px; background: #ffd100; border: 4px solid #111;
-  display: flex; justify-content: center; align-items: center; font-weight: bold;
-  box-shadow: inset 0 0 15px rgba(0,0,0,0.15);
-}
 
 /* ================= TEACH PENDANT ================= */
 .teach-pendant {
