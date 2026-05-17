@@ -9,13 +9,13 @@
 </head>
 <body>
 
-  
   <section class="hero">
+    
     <div class="hero-left">
       <h1>DEVASHISH SHARMA</h1>
       <p>Automation | Robotics | Mechatronics</p>
 
-  <div class="factory-cell">
+      <div class="factory-cell">
         
         <div class="stack-light">
           <div class="light red" id="lightRed"></div>
@@ -31,7 +31,7 @@
 
         <div class="conveyor-wrapper">
           <div class="conveyor-track"></div>
-          <div class="rollers"></div>
+          <div class="rollers" id="conveyorRollers"></div>
           <div class="conveyor" id="conveyor">
             <div class="box" id="education-box">EDUCATION</div>
             <div class="box" id="projects-box">PROJECTS</div>
@@ -45,13 +45,17 @@
           <div class="joint shoulder" id="jointShoulder">
             <div class="joint elbow" id="jointElbow">
               <div class="joint wrist" id="jointWrist">
-                <div class="gripper" id="gripper"></div>
+                <div class="gripper" id="gripper">
+                  <div class="claw top"></div>
+                  <div class="claw bottom"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-     </div>
+      </div>
+    </div>
 
     <div class="teach-pendant">
       <div class="screen">
@@ -64,32 +68,17 @@
         <button onclick="selectSection('experience')">EXPERIENCE</button>
         <button onclick="selectSection('skills')">SKILLS</button>
         <button onclick="selectSection('contact')">CONTACT</button>
-        <button class="emergency" onclick="triggerEmergencyStop()">EMERGENCY STOP</button>
       </div>
-      <div class="emergency">EMERGENCY STOP</div>
+      <button class="emergency" onclick="triggerEmergencyStop()">EMERGENCY STOP</button>
     </div>
+
   </section>
 
-  <section id="education" class="content-section">
-    <h2>Education</h2>
-    <p>Add your education details here.</p>
-  </section>
-  <section id="projects" class="content-section">
-    <h2>Projects</h2>
-    <p>Add robotics/mechatronics projects here.</p>
-  </section>
-  <section id="experience" class="content-section">
-    <h2>Experience</h2>
-    <p>Add your internships/work experience here.</p>
-  </section>
-  <section id="skills" class="content-section">
-    <h2>Skills</h2>
-    <p>PLC, ROS, MATLAB, CAD, Embedded Systems, etc.</p>
-  </section>
-  <section id="contact" class="content-section">
-    <h2>Contact</h2>
-    <p>Email / LinkedIn / GitHub</p>
-  </section>
+  <section id="education" class="content-section"><h2>Education</h2><p>Add details here.</p></section>
+  <section id="projects" class="content-section"><h2>Projects</h2><p>Add projects here.</p></section>
+  <section id="experience" class="content-section"><h2>Experience</h2><p>Add experience here.</p></section>
+  <section id="skills" class="content-section"><h2>Skills</h2><p>Add skills here.</p></section>
+  <section id="contact" class="content-section"><h2>Contact</h2><p>Add contact info here.</p></section>
 
   <script src="script.js"></script>
 </body>
