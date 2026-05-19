@@ -7,6 +7,7 @@
   
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 
@@ -14,9 +15,7 @@
     <ul class="nav-links">
       <li><a href="#contact">Contact</a></li>
       <li><a href="#portfolio">Interactive Workcell</a></li>
-      <!-- <li><a href="#experience">Roadmap</a></li> -->
       <li><a href="#projects">Projects</a></li>
-      <!-- <li><a href="#publications">Publications</a></li> -->
     </ul>
   </nav>
 
@@ -68,7 +67,7 @@
               <div class="box" id="experience-box">EXPERIENCE</div>
               <div class="box" id="projects-box">PROJECTS</div>
               <div class="box" id="publications-box">PUBLICATIONS</div>
-              <div class="box" id="skills-box">SKILLS</div>
+              <div class="box" id="creative-box">CREATIVE</div>
               <div class="box" id="contact-box">CONTACT</div>
             </div>
           </div>
@@ -106,7 +105,7 @@
           <button onclick="selectSection('experience')">EXPERIENCE</button>
           <button onclick="selectSection('projects')">PROJECTS</button>
           <button onclick="selectSection('publications')">PUBLICATIONS</button>
-          <button onclick="selectSection('skills')">SKILLS</button>
+          <button onclick="selectSection('creative')">CREATIVE</button>
           <button onclick="selectSection('contact')">CONTACT</button>
         </div>
 
@@ -217,67 +216,57 @@
     </section>
 
     <section id="projects" class="content-section">
-      <h2>Projects</h2>
-      
-      <div class="scrolling-wrapper">
-        <div class="project-track">
+      <div class="projects-container">
+        <h2>Engineering Projects</h2>
+        
+        <div class="bento-gallery">
           
-          <div class="project-card" onclick="openModal('snake')">
-            <img src="snake-robot.jpg" alt="Snake Robot" class="project-image" onerror="this.style.display='none'">
-            <h3>Serpenoid Robots for Unmanned Exploration</h3>
-            <p>Click to view project details, images, and algorithms...</p>
-          </div>
-          <div class="project-card" onclick="openModal('knee')">
-            <img src="knee-rehab.jpg" alt="Knee Rehab" class="project-image" onerror="this.style.display='none'">
-            <h3>AI-Based Knee Rehabilitation Mechanism</h3>
-            <p>Click to view system parameters and AI integration...</p>
-          </div>
-          <div class="project-card" onclick="openModal('swarm')">
-            <img src="swarm-robot.jpg" alt="Swarm Robots" class="project-image" onerror="this.style.display='none'">
-            <h3>Homogeneous Swarm of Cooperative Robots</h3>
-            <p>Click to view WeBots simulation and communication logic...</p>
-          </div>
-          <div class="project-card" onclick="openModal('disinfectant')">
-            <img src="disinfectant-bot.jpg" alt="Disinfectant Bot" class="project-image" onerror="this.style.display='none'">
-            <h3>Robotic Disinfectant System</h3>
-            <p>Click to view path planning and hardware design...</p>
-          </div>
-          <div class="project-card" onclick="openModal('follower')">
-            <h3>Fastest Line Follower Robot</h3>
-            <p>Made a fast-running bot which follows a black line. Worked with multiple sensors and different controllers...</p>
-          </div>
-          <div class="project-card" onclick="openModal('backpack')">
-            <h3>Next Generation Backpack</h3>
-            <p>Developed a smart backpack featuring a programmable pixel display built using a custom matrix of RGB LEDs.</p>
+          <div class="bento-item large" onclick="openModal('snake')">
+            <img src="snake-robot.jpg" alt="Snake Robot" onerror="this.src='https://via.placeholder.com/600x400/222/fff?text=Serpenoid+Robot'">
+            <div class="bento-overlay">
+              <h3>Serpenoid Robots</h3>
+              <p>Unmanned Exploration Locomotion</p>
+            </div>
           </div>
 
-          <div class="project-card" onclick="openModal('snake')">
-            <img src="snake-robot.jpg" alt="Snake Robot" class="project-image" onerror="this.style.display='none'">
-            <h3>Serpenoid Robots for Unmanned Exploration</h3>
-            <p>Click to view project details, images, and algorithms...</p>
+          <div class="bento-item tall" onclick="openModal('knee')">
+            <img src="https://github.com/devashishbuilds/devashish-sharma.io/blob/main/images/project_ai_knee_rehab/ansys.png?raw=true" alt="Knee Rehab" onerror="this.src='https://via.placeholder.com/300x500/222/fff?text=AI+Rehab'">
+            <div class="bento-overlay">
+              <h3>AI Knee Rehab</h3>
+              <p>Healthcare Automation</p>
+            </div>
           </div>
-          <div class="project-card" onclick="openModal('knee')">
-            <img src="knee-rehab.jpg" alt="Knee Rehab" class="project-image" onerror="this.style.display='none'">
-            <h3>AI-Based Knee Rehabilitation Mechanism</h3>
-            <p>Click to view system parameters and AI integration...</p>
+
+          <div class="bento-item" onclick="openModal('swarm')">
+            <img src="swarm-robot.jpg" alt="Swarm Robots" onerror="this.src='https://via.placeholder.com/300x300/222/fff?text=Swarm'">
+            <div class="bento-overlay">
+              <h3>Robot Swarm</h3>
+              <p>Cooperative Agents</p>
+            </div>
           </div>
-          <div class="project-card" onclick="openModal('swarm')">
-            <img src="swarm-robot.jpg" alt="Swarm Robots" class="project-image" onerror="this.style.display='none'">
-            <h3>Homogeneous Swarm of Cooperative Robots</h3>
-            <p>Click to view WeBots simulation and communication logic...</p>
+
+          <div class="bento-item" onclick="openModal('disinfectant')">
+            <img src="disinfectant-bot.jpg" alt="Disinfectant Bot" onerror="this.src='https://via.placeholder.com/300x300/222/fff?text=Disinfectant+Bot'">
+            <div class="bento-overlay">
+              <h3>Disinfectant Bot</h3>
+              <p>Autonomous Sanitization</p>
+            </div>
           </div>
-          <div class="project-card" onclick="openModal('disinfectant')">
-            <img src="disinfectant-bot.jpg" alt="Disinfectant Bot" class="project-image" onerror="this.style.display='none'">
-            <h3>Robotic Disinfectant System</h3>
-            <p>Click to view path planning and hardware design...</p>
+
+          <div class="bento-item wide" onclick="openModal('follower')">
+            <img src="follower.jpg" alt="Line Follower" onerror="this.src='https://via.placeholder.com/600x300/222/fff?text=Fastest+Line+Follower'">
+            <div class="bento-overlay">
+              <h3>Line Follower</h3>
+              <p>Sensor Integration & Control</p>
+            </div>
           </div>
-          <div class="project-card" onclick="openModal('follower')">
-            <h3>Fastest Line Follower Robot</h3>
-            <p>Made a fast-running bot which follows a black line. Worked with multiple sensors and different controllers...</p>
-          </div>
-          <div class="project-card" onclick="openModal('backpack')">
-            <h3>Next Generation Backpack</h3>
-            <p>Developed a smart backpack featuring a programmable pixel display built using a custom matrix of RGB LEDs.</p>
+
+          <div class="bento-item" onclick="openModal('backpack')">
+            <img src="backpack.jpg" alt="Backpack" onerror="this.src='https://via.placeholder.com/300x300/222/fff?text=RGB+Backpack'">
+            <div class="bento-overlay">
+              <h3>Smart Backpack</h3>
+              <p>Programmable LED Matrix</p>
+            </div>
           </div>
 
         </div>
@@ -319,13 +308,35 @@
             <span class="read-more">Read Publication &rarr;</span>
           </div>
         </a>
-        
       </div>
     </section>
 
-    <section id="skills" class="content-section">
-      <h2>Skills</h2>
-      <p>PLC, ROS, MATLAB, CAD, Embedded Systems, Python, C++</p>
+    <section id="creative" class="content-section">
+      <h2>Beyond the Desk</h2>
+      <p class="creative-desc">When I am not programming robots or building automation workflows, I channel my energy into creative and physical pursuits.</p>
+      
+      <div class="creative-grid">
+        <div class="creative-card">
+          <div class="creative-icon">&#128736;</div>
+          <h3>Product Design</h3>
+          <p>Conceptualizing and drafting functional, ergonomic solutions that blend engineering constraints with aesthetic appeal.</p>
+        </div>
+        <div class="creative-card">
+          <div class="creative-icon">&#128247;</div>
+          <h3>Photography</h3>
+          <p>Capturing structural details, landscapes, and the subtle interplay of light and geometry in everyday environments.</p>
+        </div>
+        <div class="creative-card">
+          <div class="creative-icon">&#127956;</div>
+          <h3>Hiking</h3>
+          <p>Exploring the outdoors and challenging physical limits on the trails to reset the mind after deep engineering work.</p>
+        </div>
+        <div class="creative-card">
+          <div class="creative-icon">&#127912;</div>
+          <h3>Sketch & Paint</h3>
+          <p>Translating mechanical ideas to paper and experimenting with freehand artistic expression and color theory.</p>
+        </div>
+      </div>
     </section>
 
     <section id="contact" class="content-section">
@@ -337,43 +348,36 @@
           
           <div class="social-links">
             <a href="mailto:devashish.sharm@studio.unibo.it" class="social-btn email-btn">📧 Email Me</a>
-            <a href="www.linkedin.com/in/devashish-sharma-15aaa0153" target="_blank" class="social-btn in-btn">🔗 LinkedIn</a>
+            <a href="https://www.linkedin.com/in/devashish-sharma-15aaa0153" target="_blank" class="social-btn in-btn">🔗 LinkedIn</a>
             <a href="https://github.com/devashishbuilds" target="_blank" class="social-btn git-btn">💻 GitHub</a>
           </div>
         </div>
 
         <div class="linkedin-embed-box">
           <h3>Latest Update</h3>
-          
-            <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7330384042942517248?collapsed=1" height="541" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>          
-          </div>
+            <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7330384042942517248?collapsed=1" height="541" width="100%" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>          
+        </div>
       </div>
     </section>
 
   </div>
 
   <div id="universalModal" class="project-modal">
-    <div class="modal-content">
+    <div class="modal-content split-layout">
       <span class="close-modal" onclick="closeModal()">&times;</span>
       
-      <h2 id="modalTitle">Title</h2>
-      <h4 id="modalSubtitle">Subtitle</h4>
-      
-      <div id="modalTextContent" class="modal-text-content">
-        <ul id="modalBullets" class="modal-bullets"></ul>
-      </div>
-
-      <div id="modalCarousel" class="carousel-container">
-        <button class="carousel-btn prev" onclick="changeSlide(-1)">&#10094;</button>
-        <div class="modal-image-wrapper">
-          <img id="modalImage" src="" alt="Gallery Image">
+      <div class="modal-left" id="presentationContainer" onmouseenter="pauseAutoScroll()" onmouseleave="resumeAutoScroll()">
         </div>
-        <button class="carousel-btn next" onclick="changeSlide(1)">&#10095;</button>
-      </div>
-      
-      <div id="modalSlideInfo" class="modal-info">
-        <div class="slide-counter" id="slideCounter">1 / 3</div>
-        <p id="modalDescription">Image description will appear here.</p>
+
+      <div class="modal-right">
+        <h2 id="modalTitle">Title</h2>
+        <h4 id="modalSubtitle">Subtitle</h4>
+        
+        <p id="modalSummary" class="modal-summary"></p>
+        
+        <div id="modalTextContent" class="modal-text-content">
+          <ul id="modalBullets" class="modal-bullets"></ul>
+        </div>
       </div>
       
     </div>
