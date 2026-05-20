@@ -208,7 +208,7 @@ const portfolioData = {
     subtitle: "Bio-Inspired Adaptive Locomotion",
     summary: "Developed a bio-inspired snake robot with multiple rotary joints, driven by Dynamixel MX-64R motors...",
     bullets: ["Hardware fabricated using FDM and SLA.", "Implemented traveling wave motion algorithms."],
-    pdf: "images/project_ai_knee_rehab/ai_knee.pdf" // Simply link your PDF here!
+    pdf: "images/ai_knee.pdf" // Simply link your PDF here!
   },
   "knee": {
     title: "AI Knee Rehabilitation Mechanism",
@@ -223,7 +223,7 @@ const portfolioData = {
     subtitle: "Virtual Environment Simulation",
     summary: "Setting up communication between robots in a 3-D virtual simulator (WeBots).",
     bullets: ["Webots 3D Simulation.", "Multi-agent communication setup."],
-    pdf: "images/project_ai_knee_rehab/ai_knee.pdf"
+    pdf: "images/ai_knee.pdf"
     // presentation: [ "swarm-img-1.jpg" ]
   },
   "disinfectant": {
@@ -239,7 +239,7 @@ const portfolioData = {
     subtitle: "Sensor Integration & Control Logic",
     summary: "Made a fast running bot which follows black line, worked with multiple sensors and different controllers and obtained a ideal competition winning robot.",
     bullets: ["High-speed sensory response.", "Optimal controller calibration."],
-    pdf: "images/project_ai_knee_rehab/ai_knee.pdf"
+    pdf: "images/ai_knee.pdf"
     // presentation: [ "follower-img-1.jpg" ]
   },
   "backpack": {
@@ -247,7 +247,7 @@ const portfolioData = {
     subtitle: "Programmable RGB LED Matrix",
     summary: "A smart backpack featuring a programmable pixel display built using a custom matrix of RGB LEDs.",
     bullets: ["Custom LED hardware assembly.", "Custom graphics mapping."],
-    pdf: "images/project_ai_knee_rehab/ai_knee.pdf"
+    pdf: "images/project_smart_bag/bagpack.pdf"
     // presentation: [ "backpack-img-1.jpg" ]
   }
 };
