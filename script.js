@@ -231,7 +231,7 @@ const portfolioData = {
     subtitle: "Autonomous Path Planning & Sanitization",
     summary: "A robot which is capable of avoiding obstacles in the pathway and parallelly capable of disinfecting the near-by surfaces in range.",
     bullets: ["Autonomous path navigation.", "Simultaneous spatial sanitization logic."],
-    pdf: "images/project_ai_knee_rehab/ai_knee.pdf"
+    pdf: "images/project_disinfectant_robo/disinfectant_robot.pdf"
     // presentation: [ "disinfectant-img-1.jpg", "disinfectant-img-2.jpg" ]
   },
   "follower": {
