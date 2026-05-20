@@ -208,7 +208,7 @@ const portfolioData = {
     subtitle: "Bio-Inspired Adaptive Locomotion",
     summary: "Developed a bio-inspired snake robot with multiple rotary joints, driven by Dynamixel MX-64R motors...",
     bullets: ["Hardware fabricated using FDM and SLA.", "Implemented traveling wave motion algorithms."],
-    pdf: "https://drive.google.com/file/d/1sJpZ-iBdYJbRG66oo55WYPgyPjIAxpic/view?usp=sharing" // Simply link your PDF here!
+    pdf: "https://github.com/devashishbuilds/devashish-sharma.io/blob/main/images/project_ai_knee_rehab/ai_knee.pdf" // Simply link your PDF here!
   },
   "knee": {
     title: "AI Knee Rehabilitation Mechanism",
