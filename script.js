@@ -348,7 +348,7 @@ const portfolioData = {
     subtitle: "Programmable RGB LED Matrix",
     summary: "A smart backpack featuring a programmable pixel display built using a custom matrix of RGB LEDs.",
     bullets: ["Custom LED hardware assembly.", "Custom graphics mapping."],
-    presentation: [ "images/project_smart_bag/bag1.png" ]
+    presentation: [ "https://github.com/devashishbuilds/devashish-sharma.io/blob/main/images/project_smart_bag/bag1.png?raw=true" ]
   },
   
   // ================= NEW PROJECTS ADDED =================
