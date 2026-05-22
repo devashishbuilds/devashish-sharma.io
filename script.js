@@ -18,7 +18,6 @@ let currentSection = null;
 let isMoving = false; 
 let isEmergencyStopped = false;
 let currentScale = 1;
-
 // You can tune the speed multiplier here (Lower = Faster!)
 const CONVEYOR_SPEED_FACTOR = 0.8; 
 
