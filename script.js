@@ -380,7 +380,7 @@ const portfolioData = {
     subtitle: "Beyond the Desk",
     summary: "Conceptualizing and drafting functional, ergonomic solutions that blend engineering constraints with aesthetic appeal.",
     bullets: [],
-    presentation: ["images/pd1.jpg", "images/pd2.jpg", "images/pd3.jpg"]
+    presentation: ["images/extra/pd1.jpg","images/extra/pd2.jpg", "images/extra/pd3.png", "images/extra/pd4.jpg"]
   },
   "photography": {
     title: "Photography",
