@@ -314,45 +314,51 @@ const portfolioData = {
   "snake": {
     title: "Serpenoid Robots for Exploration",
     subtitle: "Bio-Inspired Adaptive Locomotion",
-    summary: "Developed a bio-inspired snake robot with multiple rotary joints, driven by Dynamixel MX-64R motors, to achieve adaptive locomotion in straight and narrow channels. Designed and implemented a control algorithm based on traveling wave motion, enabling selective anchoring using current feedback for highly efficient propulsion.",
-    bullets: ["Hardware fabricated using FDM and SLA.", "Implemented traveling wave motion algorithms.", "Terrain anchoring via current feedback."],
+    summary: "ISRO-funded end-to-end design, fabrication, and validation of a bio-inspired snake robot for locomotion in confined spaces. Covered mechanical design, control algorithms, actuator characterization, and structured experimental testing from prototype to validated performance.",
+    bullets: ["Bio-inspired snake locomotion for confined-space navigation.", "Full hardware lifecycle: SolidWorks, FDM/SLA 3D printing, CNC, and assembly.", "Control and sensing via Python, MATLAB, and ROS.", "Structured actuator characterization: torque, repeatability, and load-response testing."],
+
     pdf: "images/project_snake/snake_robot.pdf", 
     //presentation: [ "images/snake-img-1.jpg" ]
   },
   "knee": {
     title: "AI Knee Rehabilitation Mechanism",
     subtitle: "Diagnostic Healthcare Automation",
-    summary: "The system is able to tell whether the patient is suffering from Osteoarthritis or not and if yes at what level of the same. In addition to this, it suggests the actuation parameters of the assistive mechanism such that rehabilitation process can be made faster with a good accuracy.",
-    bullets: ["AI-based Osteoarthritis assessment.", "Dynamic assistive mechanism parameter suggestion."],
+    summary: "A CNN-based system that classifies knee osteoarthritis severity from X-ray images across five grades and recommends actuation parameters for a paired rehabilitation mechanism to accelerate recovery.",
+    bullets: ["Osteoarthritis severity classification via CNN on clinical X-ray data.", "Automated rehabilitation parameter suggestion based on diagnosed grade.", "Built with Python, TensorFlow/Keras, and OpenCV."],
+
     pdf: "images/project_ai_knee_rehab/ai_knee.pdf"
     //presentation: [ "images/knee-img-1.jpg" ]
   },
   "swarm": {
     title: "Homogeneous Swarm of Cooperative Robots",
     subtitle: "Virtual Environment Simulation",
-    summary: "Setting up communication between robots in a 3-D virtual simulator (WeBots).",
-    bullets: ["Webots 3D Simulation.", "Multi-agent communication setup."],
+    summary: "Multi-robot coordination system developed entirely in a 3D virtual environment using WeBots. Implemented inter-robot communication protocols and a leader-follower algorithm enabling a swarm to operate as a cohesive decentralized team.",
+    bullets: ["Inter-robot communication protocol design in WeBots simulation.", "Leader-follower algorithm for decentralized swarm coordination."],
+
     presentation: [ "images/swarm-img-1.jpg" ]
   },
   "disinfectant": {
     title: "Robotic Disinfectant System",
     subtitle: "Autonomous Path Planning & Sanitization",
-    summary: "A robot which is capable of avoiding obstacles in the pathway and parallelly capable of disinfecting the near-by surfaces in range.",
-    bullets: ["Autonomous path navigation.", "Simultaneous spatial sanitization logic."],
+    summary: "An autonomous robot that navigates real environments while disinfecting nearby surfaces. Ultrasonic sensors handle obstacle avoidance while IR sensors trigger targeted spray actuation, enabling continuous unattended operation.",
+    bullets: ["Autonomous obstacle avoidance with ultrasonic sensing.", "IR-triggered surface disinfection for targeted spray actuation.", "Built on Arduino with custom mechanical design and fabrication."],
+
     presentation: [ "images/disinfectant-img-1.jpg" ]
   },
   "follower": {
     title: "Fastest Line Follower Robot",
     subtitle: "Sensor Integration & Control Logic",
-    summary: "Made a fast running bot which follows black line, worked with multiple sensors and different controllers and obtained a ideal competition winning robot.",
-    bullets: ["High-speed sensory response.", "Optimal controller calibration."],
+    summary: "A competition-grade autonomous line-following robot built for speed and reliability. Multiple IR sensors feed a PD controller on an Arduino Nano, tuned for fast, smooth tracking with minimal oscillation.",
+    bullets: ["PD-controlled line tracking with multi-sensor IR array.", "Optimized for competition speed and stability on Arduino Nano."],
+
     pdf: "images/project_line_follower/Line_follower.pdf"
   },
   "backpack": {
     title: "Next Generation Backpack",
     subtitle: "Programmable RGB LED Matrix",
-    summary: "A smart backpack featuring a programmable pixel display built using a custom matrix of RGB LEDs.",
-    bullets: ["Custom LED hardware assembly.", "Custom graphics mapping."],
+    summary: "A smart backpack with a custom-built programmable RGB pixel display embedded on the exterior, allowing users to run dynamic animations and patterns — turning everyday carry into a personalized visual canvas.",
+    bullets: ["Programmable RGB LED pixel display integrated into wearable hardware.", "Arduino-driven animation system with embedded C programming."],
+
     pdf: "images/project_smart_bag/bagpack.pdf"
   },
   
@@ -360,22 +366,24 @@ const portfolioData = {
   "desk-manipulator": {
     title: "3-DOF Desk Manipulator",
     subtitle: "Compact Robotic Arm for Desktop Environments",
-    summary: "Designed and developed a 3 degrees-of-freedom robotic manipulator optimized for desktop use. The project encompassed complete mechanical fabrication, forward and inverse kinematics modeling, and integration of servo motors for precise, light pick-and-place tasks.",
-    bullets: ["Custom mechanical design and 3D printing.", "Kinematic modeling and trajectory planning.", "Integrated motor control systems."],
+    summary: "A compact, fully in-house fabricated 3-DOF robotic arm designed for precise light pick-and-place tasks. Forward and inverse kinematics were modeled and implemented for smooth trajectory execution, with servo control via both Arduino and ROS.",
+    bullets: ["Forward and inverse kinematics with trajectory planning for precise motion.", "Full fabrication pipeline: SolidWorks, ANSYS, 3D printing, CNC, and assembly.", "Dual control stack using ROS and Arduino for servo integration."],
     presentation: [ "images/desk-manipulator.jpg" ]
   },
   "knee-robot": {
     title: "Knee Rehabilitation Robot",
     subtitle: "Mechanical Assistive Device for Physical Therapy",
-    summary: "Developed a physical knee rehabilitation robot focused on providing safe, controlled continuous passive motion (CPM) to assist patients recovering from knee injuries. This hardware implementation is designed with critical safety constraints in mind.",
-    bullets: ["Ergonomic mechanical linkage design.", "Safety-first actuation limits.", "Torque and velocity control for patient comfort."],
+    summary: "A home-use knee rehabilitation mechanism designed for seated operation, focused on structural efficiency, ergonomic fit, and reliable actuator integration to make assisted rehabilitation accessible outside clinical settings.",
+    bullets: ["Ergonomic seated-position rehabilitation mechanism.", "Full design-to-fabrication pipeline using SolidWorks and ANSYS.", "Fabricated via 3D printing, CNC, and manual assembly."],
+
     pdf: "images/project_knee_rehab/knee_rehab_robot.pdf"
   },
   "ambient-light": {
     title: "Ambient Screen Light",
     subtitle: "Responsive Background Illumination System",
-    summary: "Created an immersive ambient background lighting system that dynamically extends screen colors to the surrounding environment. The system samples display pixels in real-time and maps them to an addressable RGB LED strip behind the monitor.",
-    bullets: ["Real-time screen capture and color processing.", "Microcontroller integration with addressable LEDs.", "Low-latency visual synchronization."],
+    summary: "A real-time ambient lighting system that samples active monitor pixels and maps dominant colors to an addressable LED strip behind the display, creating a low-latency immersive glow that dynamically extends the screen into the room.",
+    bullets: ["Real-time screen color sampling and LED mapping with minimal latency.", "ESP32-C3 SuperMini + Python pipeline driving WS2812B addressable LEDs."],
+
     pdf: "images/project_ambient_light/sample_al.pdf"
   },
 
