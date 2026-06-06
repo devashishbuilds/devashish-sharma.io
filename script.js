@@ -449,7 +449,7 @@ const portfolioData = {
     subtitle: "SLAM Mapping, Navigation & Pick-and-Place in ROS 2",
     summary: "A ROS 2 mobile-manipulation project on the TIAGo robot covering the full autonomy stack: building a map of the environment with SLAM, localizing and navigating from a random start pose, and performing an ArUco-guided pick-and-place sequence on tagged cubes.",
     bullets: ["Task 1: Map Generation", "Autonomous exploration of the full scenario using the Nav2 SLAM stack, with the generated map saved via the Nav2 map server.", "Task 2: Navigation", "Navigation on the saved map from a random initial pose, with AMCL-based localization and alignment verified through the amcl_pose topic.", "Autonomous discovery and navigation to pick (ArUco ID 26) and place (ArUco ID 238) locations using markers on the object sides.", "Task 3: Pick and Place", "Sequenced transport of ArUco-tagged cubes from pick to place, following the order ID 63 then ID 582 (7 cm cubes, 7 cm markers).", "Tools & Skills: ROS 2, Nav2, SLAM, AMCL Localization, ArUco Marker Detection."],
-    presentation: [ "images/project_tiago/tiago_nav.png" ]
+    presentation: [ "images/project_tiago/tiago3.png","images/project_tiago/tiago1.png","images/project_tiago/tiago2.png" ]
   },
   
   // ================= NEW PROJECTS ADDED =================
