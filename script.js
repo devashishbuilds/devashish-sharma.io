@@ -508,8 +508,6 @@ const portfolioData = {
   }
 };
 
-let autoScrollInterval;
-
 async function renderPDF(url, container) {
   container.innerHTML = '<p style="color:#a0a4ab; padding: 20px; text-align:center;">Loading Presentation...</p>';
   try {
@@ -526,7 +524,6 @@ async function renderPDF(url, container) {
       container.appendChild(canvas);
       await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
     }
-    startAutoScroll();
   } catch (error) {
     container.innerHTML = '<p style="color:#fa5b60; padding: 20px;">Error loading presentation file.</p>';
     console.error("PDF Load Error:", error);
@@ -572,9 +569,8 @@ function openModal(id) {
     presentationContainer.style.display = 'block';
     renderPDF(data.pdf, presentationContainer);
   } else if (data.presentation && data.presentation.length > 0) {
-    presentationContainer.innerHTML = data.presentation.map(img => `<img src="${img}" alt="Slide">`).join('');
+    presentationContainer.innerHTML = data.presentation.map(img => `<img loading="lazy" src="${img}" alt="Slide">`).join('');
     presentationContainer.style.display = 'block';
-    startAutoScroll(); 
   } else {
     presentationContainer.style.display = 'none';
   }
@@ -589,7 +585,6 @@ function openModal(id) {
 function closeModal() {
   const modal = document.getElementById('universalModal');
   const modalContent = document.querySelector('.modal-content');
-  clearInterval(autoScrollInterval); 
   modal.style.opacity = '0';
   modalContent.style.transform = 'scale(0.9)';
   setTimeout(() => {
@@ -602,19 +597,6 @@ window.onclick = function(event) {
   const modal = document.getElementById('universalModal');
   if (event.target === modal) { closeModal(); }
 }
-
-function startAutoScroll() {
-  const container = document.getElementById('presentationContainer');
-  clearInterval(autoScrollInterval); 
-  autoScrollInterval = setInterval(() => {
-    container.scrollTop += 1.5; 
-    if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
-      clearInterval(autoScrollInterval);
-    }
-  }, 30); 
-}
-function pauseAutoScroll() { clearInterval(autoScrollInterval); }
-function resumeAutoScroll() { startAutoScroll(); }
 
 // ================= MULTILINGUAL FLIP GREETING =================
 const greetings = ["HELLO!", "CIAO!", "NAMASTE!", "HOLA!", "BONJOUR!", "HALLO!"];
@@ -675,3 +657,53 @@ if (profileImg && speechBubble) {
     profileImg.addEventListener('load', triggerPop);
   }
 }
+
+// ================= HOVER VIDEO PREVIEWS — YOUTUBE UNLISTED (PROJECT CARDS) =================
+// Any .bento-item with a non-empty data-youtube="VIDEO_ID" plays that unlisted
+// clip muted + looping on hover. The iframe is created (and the video fetched)
+// only on hover, so it never affects initial page load. Cards with an empty
+// data-youtube simply keep showing their static image. On mouse-out the iframe
+// is removed, which stops playback. The frame is sized to cover the card (no
+// black bars) and ignores pointer events so the card's click-to-open still works.
+document.querySelectorAll('.bento-item[data-youtube]').forEach(card => {
+  let frame = null;
+
+  function sizeCover() {
+    if (!frame) return;
+    const rect = card.getBoundingClientRect();
+    const vidRatio = 16 / 9;
+    if (rect.width / rect.height > vidRatio) {
+      frame.style.width = '100%';
+      frame.style.height = (rect.width / vidRatio) + 'px';
+    } else {
+      frame.style.height = '100%';
+      frame.style.width = (rect.height * vidRatio) + 'px';
+    }
+  }
+
+  card.addEventListener('mouseenter', () => {
+    const id = card.dataset.youtube;
+    if (!id) return; // no video set yet → keep the static image
+    if (!frame) {
+      frame = document.createElement('iframe');
+      frame.className = 'bento-preview-yt';
+      frame.setAttribute('frameborder', '0');
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture';
+      frame.src = 'https://www.youtube-nocookie.com/embed/' + id +
+        '?autoplay=1&mute=1&loop=1&playlist=' + id +
+        '&controls=0&modestbranding=1&rel=0&playsinline=1&disablekb=1&fs=0&iv_load_policy=3';
+      frame.addEventListener('load', () => {
+        sizeCover();
+        frame.classList.add('is-playing');
+      });
+      card.appendChild(frame);
+      sizeCover();
+    } else {
+      frame.classList.add('is-playing');
+    }
+  });
+
+  card.addEventListener('mouseleave', () => {
+    if (frame) { frame.remove(); frame = null; }
+  });
+});
