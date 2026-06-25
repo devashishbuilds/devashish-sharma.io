@@ -194,6 +194,14 @@ body { background: #1e2024; color: #ffffff; overflow-x: hidden; }
 .bento-overlay p { color: #fa5b60; font-size: 1rem; font-weight: bold; }
 .bento-badge { position: absolute; top: 10px; left: 10px; z-index: 5; background: #fa5b60; color: #fff; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 4px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.3); pointer-events: none; }
 
+/* HOVER VIDEO PREVIEW — YouTube iframe injected by script.js for .bento-item[data-youtube] */
+/* width/height are set inline by JS to cover the card (no letterboxing); centered + cropped here */
+.bento-preview-yt { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 0; opacity: 0; z-index: 2; transition: opacity 0.4s ease; pointer-events: none; background: #111; }
+.bento-preview-yt.is-playing { opacity: 1; }
+.bento-overlay { z-index: 3; } /* keep title/description above the playing clip */
+/* On video cards, soften the full dark veil to a bottom gradient so the clip shows through */
+.bento-item[data-youtube]:hover .bento-overlay { background: linear-gradient(to top, rgba(15,16,18,0.92) 0%, rgba(15,16,18,0.5) 38%, rgba(15,16,18,0) 72%); justify-content: flex-end; padding-bottom: 22px; }
+
 /* PUBLICATIONS */
 .publication-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 .publication-card { display: flex; align-items: center; gap: 20px; background: #2a2d34; padding: 25px; border-radius: 10px; text-decoration: none; color: white; transition: all 0.3s; border: 1px solid #334; }
