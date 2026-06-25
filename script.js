@@ -18,7 +18,6 @@ let currentSection = null;
 let isMoving = false; 
 let isEmergencyStopped = false;
 let currentScale = 1;
-
 // CHANGED: Lowered significantly to make the belt speed much faster during selection
 const CONVEYOR_SPEED_FACTOR = 0.25; 
 
