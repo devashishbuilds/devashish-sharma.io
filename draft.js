@@ -21,7 +21,7 @@ portfolioData['weather-frame']={
   github:'https://github.com/devashishbuilds/Ambient-Weather-Frame',
   readmeNote:'For technical details, calibration data, control logic, APIs, hardware setup, and source code, refer to the project’s GitHub README.',
   bullets:[],
-  presentation:['images/project_weather_frame/system-overview.svg']
+  presentation:['images/project_amb_weather_frame/IMG_20261109_114539.jpg','images/project_amb_weather_frame/IMG_20261109_114622.jpg','images/project_amb_weather_frame/IMG_20261109_114703.jpg','images/project_amb_weather_frame/IMG_20261109_114729.jpg','images/project_amb_weather_frame/system-overview.svg', ]
 };
 const draftMenu=document.querySelector('.menu-toggle');
 const draftNav=document.getElementById('main-nav');
